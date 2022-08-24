@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const events = require('node:events'); //для того чтобы по определеному событию возвращать ответ на клиент
+const events = require("node:events");
 
 // CONSTANTS---------------------------------------
     const PORT = 7000;
     const app = express();
-    app.use(cors());
+    // app.use(cors());
     app.use(express.json());
 // CONSTANTS---------------------------------------
 
@@ -19,24 +19,26 @@ const events = require('node:events'); //для того чтобы по опр�
         }
     }
     app.get('/', (req, res) => {
-        res.send('Start page Long Pulling')
+        res.send('Start page Event Sourcing')
     })
     start();
 // START APP----------------------------------------
 
 
 
-
-// LONG-PULLING START-------------------------------
-
+//EVENT SOURCING-----------------------------------
     const emitter = new events.EventEmitter(); //вызов событий и подписка на них
-    // create web-socket
 
-    app.get('/get-messages', (req, res) => {
-        emitter.once('newMessage', (message) => {  //прослушиваем событие с ключем "newMessage" и как только в нем произойдут изменения выводим ответом аргумент "message"
-            res.json(message);
+    app.get('/connect', (req, res) => {
+        res.writeHead(200, {
+            'Connection': 'keep-alive',
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache, no-transform',
+            'X-Accel-Buffering': 'no'
+        });
+        emitter.on('newMessage', (message) => {
+            res.write(`data: ${JSON.stringify(message)} \n\n`);
         })
-        // res.send('my test')
     })
     app.post('/new-messages', (req, res) => {
         const message = req.body;
@@ -44,5 +46,4 @@ const events = require('node:events'); //для того чтобы по опр�
         res.status(200);
         res.send('message sent');
     })
-// LONG-PULLING START-------------------------------
-
+//EVENT SOURCING-----------------------------------

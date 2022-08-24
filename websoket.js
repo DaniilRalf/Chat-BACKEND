@@ -1,8 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 
 // CONSTANTS---------------------------------------
     const PORT = 7000;
     const app = express();
+    app.use(cors());
     app.use(express.json());
 // CONSTANTS---------------------------------------
 
@@ -16,7 +18,7 @@ const express = require('express');
         }
     }
     app.get('/', (req, res) => {
-        res.send('Server started');
+        res.send('Start page Web Socket')
     })
     start();
 // START APP----------------------------------------

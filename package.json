@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:ws": "nodemon websoket.js",
+    "start:es": "nodemon eventsourcing.js",
     "start:lp": "nodemon longpulling.js"
   },
   "author": "",
